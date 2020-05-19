@@ -11,18 +11,23 @@ function start() {
 }
 
 function createWindow() {
-  mainWindow = new BrowserWindow({width: 900, height: 680});
+  mainWindow = new BrowserWindow({
+    width: 900, 
+    height: 680,
+    webPreferences: {
+      nodeIntegration: true,
+    }
+  });
   mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${join(__dirname, '../build/index.html')}`);
 
   if (isDev) {
-    // Open the DevTools.
-    //BrowserWindow.addDevToolsExtension('<location to your react chrome extension>');
+    //BrowserWindow.addDevToolsExtension('react-dev-tools');
     mainWindow.webContents.openDevTools();
   }
   mainWindow.on('closed', () => mainWindow = null);
 }
 
-app.on('ready', start);
+app.whenReady().then(start);
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
